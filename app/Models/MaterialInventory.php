@@ -6,15 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Rfq extends Model
+class MaterialInventory extends Model
 {
     protected $fillable = [
-        'client_user_id',
-        'request_title',
-        'quoted_amount',
-        'transaction_date',
-        'status',
-        'notes',
+        'code',
+        'name',
+        'specification',
+        'uom',
+        'current_stock',
+        'minimum_stock',
+        'unit_cost',
+        'is_active',
         'created_by',
         'updated_by',
     ];
@@ -22,14 +24,16 @@ class Rfq extends Model
     protected function casts(): array
     {
         return [
-            'quoted_amount' => 'decimal:2',
-            'transaction_date' => 'date',
+            'current_stock' => 'decimal:2',
+            'minimum_stock' => 'decimal:2',
+            'unit_cost' => 'decimal:2',
+            'is_active' => 'boolean',
         ];
     }
 
-    public function client(): BelongsTo
+    public function rfqItems(): HasMany
     {
-        return $this->belongsTo(User::class, 'client_user_id');
+        return $this->hasMany(RfqMaterialItem::class);
     }
 
     public function createdBy(): BelongsTo
@@ -42,8 +46,8 @@ class Rfq extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    public function materialItems(): HasMany
+    public function getStockStatusAttribute(): string
     {
-        return $this->hasMany(RfqMaterialItem::class);
+        return $this->current_stock <= $this->minimum_stock ? 'LOW' : 'OK';
     }
 }

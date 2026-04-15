@@ -3,9 +3,10 @@
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CertificateController as AdminCertificateController;
 use App\Http\Controllers\Admin\ClientController;
-use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\InventoryMaterialController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\RfqController as AdminRfqController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CertificateVerifyController;
 use App\Http\Controllers\CustomerRfqController;
@@ -27,11 +28,17 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->name('dashboard.')
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('products', ProductController::class)->except(['show']);
+    Route::resource('inventory-materials', InventoryMaterialController::class)
+        ->parameters(['inventory-materials' => 'materialInventory'])
+        ->except(['show']);
     Route::resource('projects', ProjectController::class)->except(['show', 'destroy']);
     Route::resource('rfqs', AdminRfqController::class)->except(['show']);
     Route::resource('clients', ClientController::class)->only(['index', 'edit', 'update']);
     Route::resource('certificates', AdminCertificateController::class)->except(['show', 'destroy']);
+
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::resource('roles', RoleController::class)->except(['show']);
+    });
 });
 
 Route::middleware('auth')->group(function () {

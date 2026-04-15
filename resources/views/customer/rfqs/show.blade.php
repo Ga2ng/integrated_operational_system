@@ -8,7 +8,7 @@
     <div class="py-6">
         <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-3 text-sm">
-                <p><span class="text-gray-500">Produk:</span> {{ $rfq->product->name }}</p>
+                <p><span class="text-gray-500">Kebutuhan:</span> {{ $rfq->request_title }}</p>
                 <p><span class="text-gray-500">Nilai:</span> Rp {{ number_format($rfq->quoted_amount, 0, ',', '.') }}</p>
                 <p><span class="text-gray-500">Status:</span> {{ $rfq->status }}</p>
                 <p><span class="text-gray-500">Tanggal:</span> {{ $rfq->transaction_date->format('d M Y') }}</p>

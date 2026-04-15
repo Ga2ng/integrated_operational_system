@@ -22,7 +22,7 @@
                     <table class="min-w-full text-sm">
                         <thead class="text-left text-gray-600">
                             <tr>
-                                <th class="pb-2">Produk</th>
+                                <th class="pb-2">Kebutuhan</th>
                                 <th class="pb-2">Nilai</th>
                                 <th class="pb-2">Status</th>
                                 <th class="pb-2">Tanggal</th>
@@ -32,7 +32,7 @@
                         <tbody>
                             @forelse ($rfqs as $rfq)
                                 <tr class="border-t border-gray-100">
-                                    <td class="py-2">{{ $rfq->product->name }}</td>
+                                    <td class="py-2">{{ $rfq->request_title }}</td>
                                     <td class="py-2">Rp {{ number_format($rfq->quoted_amount, 0, ',', '.') }}</td>
                                     <td class="py-2">{{ $rfq->status }}</td>
                                     <td class="py-2">{{ $rfq->transaction_date->format('d M Y') }}</td>

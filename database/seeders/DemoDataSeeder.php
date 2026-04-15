@@ -4,9 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\Certificate;
 use App\Models\ClientProfile;
-use App\Models\Product;
+use App\Models\MaterialInventory;
 use App\Models\Project;
 use App\Models\Rfq;
+use App\Models\RfqMaterialItem;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -30,26 +31,30 @@ class DemoDataSeeder extends Seeder
             ]);
         }
 
-        Product::updateOrCreate(
-            ['name' => 'Pelatihan K3 Umum'],
+        $materialA = MaterialInventory::updateOrCreate(
+            ['code' => 'MAT-CABLE-001'],
             [
-                'description' => 'Pelatihan keselamatan dan kesehatan kerja tingkat dasar.',
-                'unit' => 'peserta',
-                'base_price' => 1500000,
-                'availability_status' => 'available',
+                'name' => 'Kabel NYY 3x2.5',
+                'specification' => 'Material kabel listrik untuk instalasi indoor',
+                'uom' => 'meter',
+                'current_stock' => 120,
+                'minimum_stock' => 100,
+                'unit_cost' => 25000,
                 'is_active' => true,
                 'created_by' => $admin?->id,
                 'updated_by' => $admin?->id,
             ]
         );
 
-        Product::updateOrCreate(
-            ['name' => 'Sertifikasi Kompetensi Bidang Listrik'],
+        $materialB = MaterialInventory::updateOrCreate(
+            ['code' => 'MAT-PIPE-001'],
             [
-                'description' => 'Uji kompetensi dan sertifikasi teknisi listrik.',
-                'unit' => 'orang',
-                'base_price' => 2500000,
-                'availability_status' => 'available',
+                'name' => 'Pipa Conduit PVC',
+                'specification' => 'Pipa pelindung kabel',
+                'uom' => 'batang',
+                'current_stock' => 50,
+                'minimum_stock' => 60,
+                'unit_cost' => 18000,
                 'is_active' => true,
                 'created_by' => $admin?->id,
                 'updated_by' => $admin?->id,
@@ -70,13 +75,11 @@ class DemoDataSeeder extends Seeder
             ]
         );
 
-        $product = Product::where('name', 'Pelatihan K3 Umum')->first();
-
-        if ($customer && $product) {
-            Rfq::firstOrCreate(
+        if ($customer) {
+            $rfq = Rfq::firstOrCreate(
                 [
                     'client_user_id' => $customer->id,
-                    'product_id' => $product->id,
+                    'request_title' => 'Pengadaan material instalasi panel',
                     'transaction_date' => now()->toDateString(),
                 ],
                 [
@@ -85,6 +88,28 @@ class DemoDataSeeder extends Seeder
                     'notes' => 'Permintaan penawaran demo.',
                     'created_by' => $customer->id,
                     'updated_by' => $admin?->id,
+                ]
+            );
+
+            RfqMaterialItem::updateOrCreate(
+                [
+                    'rfq_id' => $rfq->id,
+                    'material_inventory_id' => $materialA->id,
+                ],
+                [
+                    'qty_needed' => 30,
+                    'estimated_cost' => 30 * 25000,
+                ]
+            );
+
+            RfqMaterialItem::updateOrCreate(
+                [
+                    'rfq_id' => $rfq->id,
+                    'material_inventory_id' => $materialB->id,
+                ],
+                [
+                    'qty_needed' => 20,
+                    'estimated_cost' => 20 * 18000,
                 ]
             );
 

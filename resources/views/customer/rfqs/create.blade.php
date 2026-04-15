@@ -10,12 +10,8 @@
             <form action="{{ route('dashboard.rfqs.store') }}" method="POST" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-4">
                 @csrf
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Produk / layanan</label>
-                    <select name="product_id" required class="w-full rounded-md border-gray-300 shadow-sm">
-                        @foreach ($products as $p)
-                            <option value="{{ $p->id }}" @selected(old('product_id') == $p->id)>{{ $p->name }} — Rp {{ number_format($p->base_price, 0, ',', '.') }}</option>
-                        @endforeach
-                    </select>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Judul kebutuhan RFQ</label>
+                    <input type="text" name="request_title" value="{{ old('request_title') }}" required class="w-full rounded-md border-gray-300 shadow-sm" placeholder="Contoh: Pengadaan material instalasi panel">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Nilai yang diusulkan</label>

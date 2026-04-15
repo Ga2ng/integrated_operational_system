@@ -13,7 +13,7 @@ class RoleSeeder extends Seeder
         $roles = [
             ['name' => 'Super Admin', 'code' => 'super_admin', 'description' => 'Akses penuh (bypass gate).', 'sort_order' => 1],
             ['name' => 'Admin', 'code' => 'admin', 'description' => 'Operasional sistem.', 'sort_order' => 2],
-            ['name' => 'Marketing', 'code' => 'marketing', 'description' => 'Produk dan RFQ.', 'sort_order' => 3],
+            ['name' => 'Marketing', 'code' => 'marketing', 'description' => 'RFQ dan monitoring inventory.', 'sort_order' => 3],
             ['name' => 'Customer', 'code' => 'customer', 'description' => 'Klien terdaftar.', 'sort_order' => 10],
         ];
 
@@ -35,7 +35,7 @@ class RoleSeeder extends Seeder
 
         $marketingCodes = [
             'dashboard.view',
-            'product.view', 'product.create', 'product.update', 'product.delete',
+            'inventory.view',
             'rfq.view', 'rfq.create', 'rfq.update', 'rfq.delete',
         ];
 

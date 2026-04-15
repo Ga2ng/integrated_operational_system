@@ -18,7 +18,7 @@
                     <ul class="divide-y divide-gray-100 text-sm">
                         @forelse ($rfqs as $rfq)
                             <li class="px-4 py-3 flex justify-between">
-                                <span>{{ $rfq->product->name }}</span>
+                                <span>{{ $rfq->request_title }}</span>
                                 <span class="text-gray-500">{{ $rfq->status }}</span>
                             </li>
                         @empty
@@ -49,7 +49,7 @@
                     <i class="fa-solid fa-plus"></i> Ajukan RFQ baru
                 </a>
                 <a href="{{ route('catalog') }}" class="inline-flex items-center gap-2 rounded-lg border border-[#0d7f7a] text-[#0d7f7a] px-4 py-2 text-sm font-medium">
-                    <i class="fa-solid fa-store"></i> Lihat katalog
+                    <i class="fa-solid fa-circle-info"></i> Lihat portal publik
                 </a>
             </div>
         </div>
