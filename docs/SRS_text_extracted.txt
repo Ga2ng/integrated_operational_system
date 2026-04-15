@@ -1,0 +1,942 @@
+SOFTWARE REQUIREMENTS SPECIFICATION (SRS)
+Portal Digital PTS
+2026
+PENDAHULUAN
+Tujuan
+Dokumen Spesifikasi Kebutuhan Perangkat Lunak (Software Requirements Specification/SRS) ini bertujuan untuk mendefinisikan kebutuhan sistem Portal Digital PT. PTS secara rinci sebagai acuan bagi pengembang dalam proses perancangan, pembangunan, dan implementasi sistem.
+Dokumen ini bertujuan untuk mendefinisikan kebutuhan perangkat lunak sistem ERP Portal Digital PT. PTS sebagai acuan teknis bagi tim pengembang dalam membangun sistem yang mendukung operasional internal perusahaan serta layanan eksternal kepada klien.
+Ruang Lingkup
+Portal Digital PT. PTS merupakan sistem terintegrasi yang mendukung layanan akademik, administrasi, dan penyampaian informasi bagi seluruh pemangku kepentingan, termasuk siswa, administrator, dan manajemen.
+Sistem ERP Portal Digital PT. PTS merupakan platform terintegrasi yang mendukung:
+A. Operasional Internal Perusahaan (PT. PTS):
+Manajemen operasional
+Manajemen keuangan
+Manajemen sumber daya manusia
+Monitoring dan pelaporan kinerja
+B. Layanan Eksternal (Client-Facing System - GRATEC Training):
+Akses layanan pelatihan (training)
+Manajemen peserta training
+Penyampaian informasi dan materi
+Monitoring progres peserta
+Integrasi dengan sistem backend
+Definisi, Akronim, dan Singkatan
+SRS: Software Requirements Specification
+EA: Enterprise Architecture
+TOGAF: The Open Group Architecture Framework
+UI: User Interface
+API: Application Programming Interface
+Referensi
+IEEE 830 Software Requirements Specification
+TOGAF ADM Framework
+Dokumen ini berisi deskripsi umum sistem, kebutuhan spesifik (fungsional dan non-fungsional), serta batasan dan asumsi yang digunakan dalam pengembangan Portal Digital PT. PTS.
+Pada dasarnya ini merupakan panduan serta dokumentasi untuk membangun sistem yang terintegrasi semacam ERP tapi tidak terlalu kompleks. Fokus pada backend meruapakan kunci utama dari business proses pada portal PT. PTS.
+Beberapa AKTOR terdapat beberapa USE CASE dan roles yang di atur oleh sistem sesuai dengan fitur dan penggunaan.
+DESKRIPSI UMUM
+Perspektif Produk
+Portal Digital PT. PTS merupakan bagian dari sistem enterprise yang terintegrasi dengan basis data dan layanan backend untuk mendukung proses bisnis organisasi secara menyeluruh.
+Fungsi Produk
+Fungsi utama sistem meliputi:
+Autentikasi dan otorisasi pengguna
+Pengelolaan data pengguna
+Penyajian dashboard
+Akses informasi akademik
+Manajemen konten informasi
+Karakteristik Pengguna
+Administrator: Mengelola sistem dan data pengguna
+Siswa: Mengakses informasi akademik pelatihan
+Manajemen: Memantau laporan dan informasi strategis
+Klien – (Proyek) : Memiliki akses terbatas untuk mengelola proyek berdasarkan standar manajemen proyek
+Lingkungan Operasi
+Aplikasi berbasis web
+Browser: Google Chrome, Mozilla Firefox, Safari
+Server: Cloud atau On-Premise
+Batasan Perancangan dan Implementasi
+Sistem dikembangkan berbasis web
+Harus memenuhi standar keamanan data
+Harus dapat terintegrasi dengan sistem yang sudah ada
+Asumsi dan Ketergantungan
+Pengguna memiliki akses internet
+Infrastruktur backend tersedia dan berjalan dengan baik
+Perspektif Sistem
+Sistem minis ERP terdiri dari dua domain utama yang memiliki akses, sebagai berikut:
+Internal Sistem (Enterprise System)
+Digunakan oleh stakeholder internal PT. PTS untuk menjalankan proses bisnis inti.
+Eksternal Service System (Client System)
+Digunakan oleh klien (peserta training GRATEC) untuk mengakses layanan yang disediakan perusahaan.
+Kedua domain ini terintergrasi dalam satu platform, namun memiliki kontrol akses dan modul yang berbeda.
+Aktor Sistem (Business Actor)
+Aktor sistem yang kinerja nya dalam proses bisnis utama perusahaan khusus nya pada portal PT. PTS.
+Adapun Aktor yang sangat penting dalam Sistem Informasi ini ialah Super Admin yang dapat melakukan pengeloaan secara menyeluruh untuk sistem yang berkerja dalam aplikasi Portal PT. PTS.
+Aktor Internal (Enterprise Actor)
+Role Operasional:
+Staff Operasional
+Supervisor Operasional
+Role Manajerial:
+Manager Divisi
+Kepala Departemen
+Role Administratif:
+Admin Sistem
+Finance/Admin Support
+Aktor Eksternal (Client Actor)
+Role Klien (GRATEC Training):
+Peserta Training
+Instruktur Training
+Admin GRATEC Training
+Role Klien (Project Management System):
+Project Manager
+Estimator / Accountant
+Admin ISPMS
+Klasifikasi USE CASE
+USE CASE Internal (ERP Core)
+  UC-01: Autentikasi Pengguna
+  UC-02: Kelola Data Operasional
+  UC-03: Monitoring Operasional
+  UC-04: Dashboard Manajerial
+  UC-05: Kelola Keuangan
+  UC-06: Generate Laporan
+  UC-07: Manajemen Pengguna
+  UC-08: Manajemen Role
+USE CASE Eksternal (Client Service – GRATEC)
+  UC-09: Akses Portal Training
+  UC-10: Kelola Data Peserta
+  UC-11: Akses Materi Training
+  UC-12: Monitoring Progress Peserta
+Supporting USE CASE
+  UC-13: Validasi Data
+  UC-14: Logging Aktivitas
+  UC-15: Integrasi API
+  UC-16: Notifikasi Sistem
+Relasi USE CASE
+Include
+  UC-02 → UC-13
+  UC-05 → UC-13
+  UC-10 → UC-13
+  UC-02 → UC-14
+  UC-05 → UC-14
+  UC-11 → UC-15
+  UC-06 → UC-15
+Extend
+  UC-01 → UC-16
+  UC-02 → UC-16
+  UC-05 → UC-16
+  UC-09 → UC-16
+Mapping Aktor ke USE CASE
+Internal Actor
+Staff Operasional → UC-01, UC-02, UC-03
+Supervisor Operasional → UC-02, UC-03
+Manager Divisi → UC-01, UC-04, UC-06
+Kepala Departemen → UC-04, UC-06
+Admin Sistem → UC-01, UC-07, UC-08
+Finance/Admin Support → UC-01, UC-05, UC-06
+Eksternal Actor
+Peserta Training → UC-09, UC-11, UC-12
+Instruktur Training → UC-09, UC-10, UC-12
+USE CASE Description
+Authentikasi Pengguna
+Elemen
+Deskripsi
+Use Case ID
+UC-01
+Use Case Name
+Autentikasi Pengguna
+Klasifikasi
+Internal Use Case
+Aktor Utama
+Pengguna Internal (Admin, Staff, Instruktur)
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Proses autentikasi pengguna untuk memperoleh akses ke dalam sistem Portal Digital PTS berdasarkan kredensial yang valid dan hak akses yang dimiliki.
+Precondition
+1. Pengguna telah terdaftar dalam sistem.
+2. Pengguna memiliki username/email dan password.
+3. Sistem dalam kondisi aktif.
+Postcondition (Success)
+1. Pengguna berhasil login.2. Sistem menampilkan dashboard sesuai role pengguna.
+Postcondition (Failure)
+1. Pengguna tetap di halaman login.2. Sistem menampilkan pesan kesalahan.
+Main Flow
+1. Pengguna mengakses halaman login.
+2. Pengguna memasukkan username/email dan password.
+3. Pengguna menekan tombol login.
+4. Sistem memvalidasi kredensial.
+5. Sistem mengidentifikasi role pengguna.
+6. Sistem mengarahkan ke dashboard.
+Alternative Flow
+A1: Kredensial Tidak Valid- Sistem menolak login dan menampilkan pesan error.
+A2: Akun Tidak Aktif- Sistem menolak login dan menampilkan notifikasi akun tidak aktif.
+A3: Lupa Password- Pengguna diarahkan ke proses reset password.
+Business Rules
+1. Password harus terenkripsi.
+2. Maksimal percobaan login (misal 3 kali).
+3. Sistem mencatat log aktivitas login.
+4. Hak akses berdasarkan role pengguna.
+Special Requirements
+1. Waktu respon ≤ 3 detik.
+2. Menggunakan HTTPS.
+3. Mendukung multi-role.
+4. Opsional: MFA.
+Relasi Use Case
+Include: Validasi KredensialExtend: Reset Password
+Kelola Data Operasional
+Elemen
+Deskripsi
+Use Case ID
+UC-02
+Use Case Name
+Kelola Data Operasional
+Klasifikasi
+Internal Use Case
+Aktor Utama
+Admin / Staff Operasional
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Precondition
+1. Pengguna telah berhasil login ke sistem.
+2. Pengguna memiliki hak akses terhadap data operasional.
+Postcondition (Success)
+1. Data operasional berhasil ditambahkan, diperbarui, atau dihapus.
+2. Sistem menyimpan perubahan data.
+Postcondition (Failure)
+1. Perubahan data tidak tersimpan.
+2. Sistem menampilkan pesan kesalahan.
+Main Flow
+1. Pengguna mengakses menu data operasional.
+2. Sistem menampilkan daftar data (training, jadwal, dll).
+3. Pengguna memilih jenis data yang akan dikelola.
+4. Pengguna memilih aksi (tambah, ubah, hapus, nonaktifkan).
+5. Pengguna menginput atau memperbarui data.
+6. Pengguna menyimpan perubahan.
+7. Sistem memvalidasi data.
+8. Sistem menyimpan data.
+9. Sistem menampilkan notifikasi berhasil.
+Alternative Flow
+A1: Data Tidak Valid- Sistem menolak input dan menampilkan error.
+A2: Data Duplikat- Sistem mendeteksi data yang sudah ada.
+A3: Gagal Simpan Data- Sistem gagal menyimpan perubahan.
+A4: Data Tidak Dapat Dihapus- Data memiliki relasi dengan data lain.
+Business Rules
+1. Setiap data harus memiliki identitas unik.
+2. Data yang memiliki relasi tidak dapat dihapus langsung.
+3. Sistem menerapkan validasi sesuai jenis data.
+4. Status data dapat berupa aktif/nonaktif.
+Special Requirements
+1. Sistem harus mendukung integritas data (data consistency).
+2. Sistem mencatat aktivitas perubahan (audit trail).
+3. Perubahan data harus real-time.
+Relasi Use Case
+Include: Validasi DataExtend: Penonaktifan Data
+Pengelolaan Profil Pengguna
+Elemen
+Deskripsi
+Use Case ID
+UC-02
+Use Case Name
+Pengelolaan Profil Pengguna
+Klasifikasi
+Internal Use Case
+Aktor Utama
+Pengguna Internal (Admin, Staff, Instruktur)
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Precondition
+1. Pengguna telah berhasil login ke sistem.
+2. Sistem dalam kondisi aktif.
+Postcondition (Success)
+1. Data profil pengguna berhasil diperbarui.
+2. Sistem menyimpan perubahan data ke database.
+Postcondition (Failure)
+1. Perubahan data tidak tersimpan.
+2. Sistem menampilkan pesan kesalahan.
+Main Flow
+1. Pengguna mengakses menu profil.
+2. Sistem menampilkan data profil pengguna.
+3. Pengguna melakukan perubahan data (misalnya nama, email, nomor telepon, password).
+4. Pengguna menekan tombol simpan.
+5. Sistem memvalidasi data yang dimasukkan.
+6. Sistem menyimpan perubahan data.
+7. Sistem menampilkan notifikasi berhasil.
+Alternative Flow
+A1: Data Tidak Valid- Pada langkah 5, sistem mendeteksi data tidak valid (misalnya format email salah).- Sistem menampilkan pesan error.
+A2: Gagal Simpan Data- Pada langkah 6, terjadi kegagalan penyimpanan.- Sistem menampilkan notifikasi gagal.
+A3: Perubahan Password- Sistem meminta verifikasi password lama sebelum menyimpan password baru.
+Business Rules
+1. Email harus unik.
+2. Format data harus sesuai validasi sistem.
+3. Perubahan password harus memenuhi kebijakan keamanan (minimal karakter, kombinasi huruf/angka).
+Special Requirements
+1. Data harus tersimpan secara real-time.
+2. Sistem menjamin keamanan data pengguna.
+3. Validasi input harus dilakukan di sisi client dan server.
+Relasi Use Case
+Include: Validasi Data ProfilExtend: Perubahan Password
+Kelola Data Operasional
+Elemen
+Deskripsi
+Use Case ID
+UC-02
+Use Case Name
+Kelola Data Operasional
+Klasifikasi
+Internal Use Case
+Aktor Utama
+Admin, Staff Operasional
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Precondition
+1. Pengguna telah berhasil login (UC-01).
+2. Pengguna memiliki hak akses sesuai role.
+3. Sistem dalam kondisi aktif.
+Postcondition (Success)
+1. Data operasional berhasil ditambahkan, diperbarui, dihapus, atau dinonaktifkan.
+2. Sistem menyimpan perubahan data secara konsisten.
+Postcondition (Failure)
+1. Perubahan data tidak tersimpan.
+2. Sistem menampilkan pesan kesalahan kepada pengguna.
+Main Flow
+1. Pengguna mengakses menu kelola data operasional.
+2. Sistem menampilkan daftar kategori data (training, jadwal, instruktur, dll).
+3. Pengguna memilih jenis data yang akan dikelola.
+4. Sistem menampilkan daftar data sesuai kategori.
+5. Pengguna memilih aksi (tambah, ubah, hapus, nonaktifkan).
+6. Pengguna menginput atau memperbarui data.
+7. Pengguna menyimpan perubahan.
+8. Sistem memvalidasi data.
+9. Sistem menyimpan perubahan data.
+10. Sistem menampilkan notifikasi berhasil.
+Alternative Flow
+A1: Data Tidak Valid- Pada langkah 8, sistem mendeteksi input tidak valid.- Sistem menampilkan pesan error dan meminta perbaikan.A2: Data Duplikat- Sistem mendeteksi data dengan identitas yang sama.- Sistem menolak penyimpanan.A3: Gagal Menyimpan Data- Terjadi kesalahan sistem saat penyimpanan.- Sistem menampilkan notifikasi gagal.A4: Data Tidak Dapat Dihapus- Data memiliki relasi dengan entitas lain.- Sistem menyarankan penonaktifan data.
+Business Rules
+1. Setiap data harus memiliki identitas unik.2. Data yang memiliki relasi tidak dapat dihapus secara langsung (harus menggunakan mekanisme nonaktif).3. Sistem menerapkan validasi sesuai jenis data.4. Status data terdiri dari aktif dan nonaktif.
+Special Requirements
+1. Sistem menjamin konsistensi dan integritas data.2. Sistem mencatat seluruh aktivitas perubahan (audit trail).3. Perubahan data harus tercermin secara real-time.4. Sistem harus mampu menangani volume data yang besar.
+Relasi Use Case
+Include: UC-01 Autentikasi Pengguna, Validasi DataExtend: Penonaktifan Data
+Manajemen Data Training (GRATEC)
+Elemen
+Deskripsi
+Use Case ID
+UC-02.01
+Use Case Name
+Manajemen Data Training (GRATEC)
+Klasifikasi
+Internal Use Case (Child dari UC-02)
+Aktor Utama
+Admin, Staff Operasional
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Precondition
+1. Pengguna telah login (UC-01).
+2. Pengguna memiliki hak akses untuk mengelola data training.
+3. Sistem dalam kondisi aktif.
+Postcondition (Success)
+1. Data training berhasil ditambahkan/diperbarui/dihapus/dinonaktifkan.
+2. Sistem menyimpan data training secara konsisten.
+Postcondition (Failure)
+1. Perubahan data tidak tersimpan.
+2. Sistem menampilkan pesan kesalahan.
+Main Flow
+1. Pengguna mengakses menu manajemen data training.
+2. Sistem menampilkan daftar training.
+3. Pengguna memilih aksi (tambah, ubah, hapus, nonaktifkan).
+4. Pengguna menginput atau memperbarui data training (nama, kode, deskripsi, kategori, harga, durasi).
+5. Pengguna menyimpan data.
+6. Sistem memvalidasi data training.
+7. Sistem menyimpan data ke database.
+8. Sistem menampilkan notifikasi berhasil.
+Alternative Flow
+A1: Data Tidak Valid- Sistem mendeteksi input tidak sesuai (misalnya format atau field kosong).- Sistem menampilkan pesan error.
+A2: Data Duplikat- Kode atau nama training sudah digunakan.- Sistem menolak penyimpanan.
+A3: Gagal Menyimpan Data- Terjadi kesalahan saat penyimpanan.- Sistem menampilkan notifikasi gagal.
+A4: Data Tidak Dapat Dihapus- Training sudah digunakan pada jadwal/kelas.- Sistem menyarankan penonaktifan.
+A5: Penonaktifan Training- Pengguna menonaktifkan training.- Training tidak tersedia untuk operasional selanjutnya.
+Business Rules
+1. Setiap training harus memiliki kode unik.
+2. Harga training tidak boleh bernilai negatif.
+3. Training yang sudah memiliki relasi (jadwal/peserta) tidak dapat dihapus.
+4. Status training terdiri dari aktif dan nonaktif.
+5. Data kategori training harus valid.
+Special Requirements
+1. Sistem harus mendukung pengelolaan data dalam jumlah besar.
+2. Sistem mencatat aktivitas perubahan (audit trail).
+3. Perubahan data harus tersedia secara real-time untuk modul lain.
+4. Sistem menjamin integritas data antar modul.
+Relasi Use Case
+Include: UC-01 Autentikasi Pengguna, Validasi Data TrainingExtend: Penonaktifan Training
+Manajemen Jadwal/Kelas Training
+Elemen
+Deskripsi
+Use Case ID
+UC-02.02
+Use Case Name
+Manajemen Jadwal / Kelas Training
+Klasifikasi
+Internal Use Case (Child dari UC-02)
+Aktor Utama
+Admin, Staff Operasional
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Precondition
+1. Pengguna telah login (UC-01).
+2. Data training sudah tersedia (UC-02.01).
+3. Pengguna memiliki hak akses untuk mengelola jadwal/kelas.
+Postcondition (Success)
+1. Data jadwal/kelas berhasil ditambahkan/diperbarui/dihapus/dinonaktifkan.
+2. Sistem menyimpan data jadwal secara konsisten.
+Postcondition (Failure)
+1. Perubahan data tidak tersimpan.
+2. Sistem menampilkan pesan kesalahan.
+Main Flow
+1. Pengguna mengakses menu manajemen jadwal/kelas.
+2. Sistem menampilkan daftar jadwal/kelas training.
+3. Pengguna memilih aksi (tambah, ubah, hapus, nonaktifkan).
+4. Pengguna memilih data training yang akan dijadwalkan.
+5. Pengguna menginput detail jadwal (tanggal, waktu, lokasi, instruktur, kapasitas).
+6. Pengguna menyimpan data.
+7. Sistem memvalidasi data jadwal.
+8. Sistem menyimpan data ke database.
+9. Sistem menampilkan notifikasi berhasil.
+Alternative Flow
+A1: Data Tidak Valid- Sistem mendeteksi input tidak valid.- Sistem menampilkan pesan error.
+A2: Jadwal Bentrok- Sistem mendeteksi konflik waktu (instruktur atau kelas).- Sistem menolak penyimpanan.
+A3: Kapasitas Tidak Valid- Kapasitas ≤ 0.- Sistem menolak input.
+A4: Data Tidak Dapat Dihapus- Kelas sudah memiliki peserta terdaftar.- Sistem menyarankan penonaktifan.
+A5: Penonaktifan Kelas- Pengguna menonaktifkan kelas.- Kelas tidak tersedia untuk pendaftaran.
+Business Rules
+1. Setiap jadwal harus terkait dengan satu data training.
+2. Satu instruktur tidak boleh memiliki jadwal yang bentrok pada waktu yang sama.
+3. Kapasitas peserta harus lebih dari 0.4. Kelas yang sudah memiliki peserta tidak dapat dihapus.
+5. Status kelas terdiri dari aktif dan nonaktif.
+Special Requirements
+1. Sistem harus mampu mendeteksi konflik jadwal secara otomatis.
+2. Perubahan data harus real-time.
+3. Sistem mencatat aktivitas perubahan (audit trail).
+4. Sistem menjaga konsistensi relasi dengan data training dan peserta.
+Relasi Use Case
+Include: UC-01 Autentikasi Pengguna, UC-02.01 Data Training, Validasi JadwalExtend: Penonaktifan Kelas
+Manjemen Data Instruktur
+Elemen
+Deskripsi
+Use Case ID
+UC-02.03
+Use Case Name
+Manajemen Data Instruktur
+Klasifikasi
+Internal Use Case (Child dari UC-02)
+Aktor Utama
+Admin, Staff Operasional
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Precondition
+1. Pengguna telah login (UC-01).
+2. Pengguna memiliki hak akses untuk mengelola data instruktur.
+3. Sistem dalam kondisi aktif.
+Postcondition (Success)
+1. Data instruktur berhasil ditambahkan/diperbarui/dihapus/dinonaktifkan.
+2. Sistem menyimpan data instruktur secara konsisten.
+Postcondition (Failure)
+1. Perubahan data tidak tersimpan.
+2. Sistem menampilkan pesan kesalahan.
+Main Flow
+1. Pengguna mengakses menu manajemen instruktur.
+2. Sistem menampilkan daftar instruktur.
+3. Pengguna memilih aksi (tambah, ubah, hapus, nonaktifkan).
+4. Pengguna menginput atau memperbarui data instruktur (nama, keahlian, kontak, dll).
+5. Pengguna menyimpan data.
+6. Sistem memvalidasi data instruktur.
+7. Sistem menyimpan data ke database.
+8. Sistem menampilkan notifikasi berhasil.
+Alternative Flow
+A1: Data Tidak Valid- Sistem mendeteksi input tidak valid.- Sistem menampilkan pesan error.
+A2: Data Duplikat- Data instruktur sudah terdaftar (misalnya email sama).- Sistem menolak penyimpanan.
+A3: Gagal Menyimpan Data- Terjadi kesalahan saat penyimpanan.- Sistem menampilkan notifikasi gagal.
+A4: Data Tidak Dapat Dihapus- Instruktur sudah digunakan dalam jadwal/kelas.- Sistem menyarankan penonaktifan.
+A5: Penonaktifan Instruktur- Pengguna menonaktifkan instruktur.- Instruktur tidak dapat digunakan pada jadwal baru.
+Business Rules
+1. Setiap instruktur harus memiliki identitas unik (misalnya ID atau email).
+2. Instruktur yang sudah terhubung dengan jadwal tidak dapat dihapus.
+3. Status instruktur terdiri dari aktif dan nonaktif.
+4. Data instruktur harus mencerminkan kompetensi/keahlian yang relevan.
+Special Requirements
+1. Sistem mencatat aktivitas perubahan (audit trail).
+2. Data instruktur harus dapat diakses oleh modul jadwal secara real-time.
+3. Sistem menjamin integritas relasi antara instruktur dan jadwal.
+Relasi Use Case
+Include: UC-01 Autentikasi Pengguna, Validasi Data InstrukturExtend: Penonaktifan Instruktur
+Monitoring Operasional
+Elemen
+Deskripsi
+Use Case ID
+UC-03
+Use Case Name
+Monitoring Operasional
+Klasifikasi
+Internal Use Case
+Aktor Utama
+Admin, Staff Operasional, Manajer
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Precondition
+1. Pengguna telah login (UC-01).
+2. Data operasional tersedia (UC-02).
+3. Pengguna memiliki hak akses untuk monitoring.
+Postcondition (Success)
+1. Informasi operasional ditampilkan secara akurat dan real-time.
+2. Pengguna memperoleh insight terhadap kondisi operasional.
+Postcondition (Failure)
+1. Data tidak dapat ditampilkan.
+2. Sistem menampilkan pesan kesalahan.
+Main Flow
+1. Pengguna mengakses menu monitoring operasional.
+2. Sistem menampilkan ringkasan data operasional.
+3. Pengguna memilih kategori monitoring (peserta, kelas, kapasitas, dll).
+4. Sistem menampilkan data detail sesuai pilihan.
+5. Pengguna dapat melakukan filter atau pencarian data.
+6. Sistem memperbarui tampilan data secara real-time.
+7. Pengguna melakukan analisis terhadap data yang ditampilkan.
+Alternative Flow
+A1: Data Tidak Tersedia- Sistem tidak menemukan data sesuai filter.- Sistem menampilkan notifikasi “data tidak ditemukan”.
+A2: Gagal Memuat Data- Terjadi kesalahan saat pengambilan data.- Sistem menampilkan pesan error.
+A3: Keterbatasan Akses- Pengguna tidak memiliki hak akses terhadap data tertentu.- Sistem membatasi tampilan data.
+Business Rules
+1. Data monitoring bersifat read-only (tidak dapat diubah langsung).
+2. Informasi harus mencerminkan kondisi aktual (real-time atau near real-time).
+3. Hak akses menentukan data yang dapat dilihat pengguna.
+4. Sistem mendukung filtering berdasarkan parameter tertentu (tanggal, kelas, instruktur).
+Special Requirements
+1. Sistem harus mampu menampilkan data secara cepat dan responsif.
+2. Mendukung refresh data secara real-time atau periodik.
+3. Sistem mampu menangani volume data besar.
+4. Antarmuka harus informatif dan mudah dipahami.
+Relasi Use Case
+Include: UC-01 Autentikasi Pengguna, UC-02 Kelola Data Operasional
+Extend: Filter Data Monitoring
+Monitoring Peserta Training
+Elemen
+Deskripsi
+Use Case ID
+UC-03.01
+Use Case Name
+Monitoring Peserta Training
+Klasifikasi
+Internal Use Case (Child dari UC-03)
+Aktor Utama
+Admin, Staff Operasional, Manajer
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Precondition
+1. Pengguna telah login (UC-01).
+2. Data peserta dan kelas tersedia.
+3. Pengguna memiliki hak akses monitoring.
+Postcondition (Success)
+Data peserta ditampilkan secara akurat sesuai filter yang dipilih.
+Main Flow
+1. Pengguna mengakses menu monitoring peserta.
+2. Sistem menampilkan daftar peserta.
+3. Pengguna memilih filter (kelas, tanggal, dll).
+4. Sistem menampilkan data peserta sesuai filter.
+5. Pengguna melakukan analisis data.
+Alternative Flow
+A1: Data tidak ditemukan → sistem menampilkan notifikasi.
+A2: Gagal memuat data → sistem menampilkan error.
+Business Rules
+1. Data bersifat read-only.
+2. Data harus real-time/near real-time.
+Relasi Use Case
+Include: UC-03 Monitoring Operasional
+Monitoring Kelas Berjalan
+Elemen
+Deskripsi
+Use Case ID
+UC-03.02
+Use Case Name
+Monitoring Kelas Berjalan
+Klasifikasi
+Internal Use Case (Child dari UC-03)
+Aktor Utama
+Admin, Staff Operasional, Manajer
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Precondition
+1. Pengguna telah login.
+2. Data jadwal/kelas tersedia.
+Postcondition (Success)
+Informasi kelas ditampilkan sesuai kondisi aktual.
+Main Flow
+1. Pengguna mengakses menu monitoring kelas.
+2. Sistem menampilkan daftar kelas.
+3. Pengguna memilih filter (tanggal, status, instruktur).
+4. Sistem menampilkan data kelas.
+5. Pengguna menganalisis status kelas.
+Alternative Flow
+A1: Data tidak tersedia.
+A2: Gagal memuat data.
+Business Rules
+1. Status kelas (aktif, berjalan, selesai).
+2. Data tidak dapat diubah dari modul ini.
+Relasi Use Case
+Include: UC-03 Monitoring Operasional
+Monitoring Kapasitas & Kuota
+Elemen
+Deskripsi
+Use Case ID
+UC-03.03
+Use Case Name
+Monitoring Kapasitas & Kuota
+Klasifikasi
+Internal Use Case (Child dari UC-03)
+Aktor Utama
+Admin, Staff Operasional, Manajer
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Precondition
+1. Pengguna telah login.
+2. Data kelas dan peserta tersedia.
+Postcondition (Success)
+Informasi kapasitas dan kuota ditampilkan secara akurat.
+Main Flow
+1. Pengguna mengakses menu monitoring kapasitas.
+2. Sistem menampilkan daftar kelas dengan informasi kapasitas dan jumlah peserta.
+3. Pengguna melakukan filter data.
+4. Sistem menampilkan sisa kuota.
+5. Pengguna melakukan analisis.
+Alternative Flow
+A1: Data tidak ditemukan.
+A2: Gagal memuat data.
+Business Rules
+1. Kapasitas tidak boleh dilampaui.
+2. Data harus real-time.
+3. Sistem menampilkan sisa kuota secara otomatis.
+Relasi Use Case
+Include: UC-03 Monitoring Operasional
+Dashboard Manajerial
+Elemen
+Deskripsi
+Use Case ID
+UC-04
+Use Case Name
+Dashboard Manajerial
+Klasifikasi
+Internal Use Case
+Aktor Utama
+Manajer, Eksekutif
+Stakeholder
+Manajemen Perusahaan PTS
+Deskripsi
+Precondition
+1. Pengguna telah login (UC-01).
+2. Data operasional dan keuangan tersedia (UC-02, UC-05).
+3. Pengguna memiliki hak akses sebagai manajer atau eksekutif.
+Postcondition (Success)
+1. Dashboard ditampilkan dengan informasi yang relevan dan terkini.
+2. Pengguna memperoleh insight strategis untuk pengambilan keputusan.
+Postcondition (Failure)
+1. Dashboard gagal dimuat.
+2. Sistem menampilkan pesan kesalahan.
+Main Flow
+1. Pengguna mengakses dashboard manajerial.
+2. Sistem menampilkan ringkasan KPI utama (jumlah peserta, jumlah kelas, pendapatan, tingkat okupansi).
+3. Sistem menampilkan visualisasi data (grafik, chart, summary card).
+4. Pengguna memilih periode waktu (harian, bulanan, tahunan).
+5. Sistem memperbarui data dashboard sesuai filter.
+6. Pengguna menganalisis performa bisnis berdasarkan informasi yang ditampilkan.
+Alternative Flow
+A1: Data Tidak Tersedia- Sistem menampilkan dashboard kosong atau notifikasi.
+A2: Gagal Memuat Data- Sistem menampilkan pesan error.
+A3: Hak Akses Terbatas- Sistem hanya menampilkan sebagian data sesuai role pengguna.
+Business Rules
+1. Data yang ditampilkan merupakan agregasi dari data operasional dan keuangan.
+2. Informasi harus akurat dan mencerminkan kondisi terkini.
+3. Hak akses menentukan jenis KPI yang dapat dilihat.
+4. Dashboard hanya bersifat read-only.
+Special Requirements
+1. Dashboard harus responsif dan cepat (< 3 detik).
+2. Visualisasi harus mudah dipahami (user-friendly).
+3. Sistem mendukung update data secara real-time atau near real-time.
+4. Mendukung visualisasi grafik interaktif.
+Relasi Use Case
+Include: UC-01 Autentikasi Pengguna, UC-03 Monitoring OperasionalExtend: Filter Dashboard
+Kelola Keungan
+Elemen
+Deskripsi
+Use Case ID
+UC-05
+Use Case Name
+Kelola Keuangan
+Klasifikasi
+Internal Use Case
+Aktor Utama
+Admin Keuangan, Staff Keuangan
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Precondition
+1. Pengguna telah login (UC-01).
+2. Data pendaftaran training tersedia.
+3. Pengguna memiliki hak akses ke modul keuangan.
+Postcondition (Success)
+1. Data pembayaran tercatat dengan benar.
+2. Status pembayaran terverifikasi.
+3. Data keuangan siap digunakan untuk laporan dan dashboard.
+Postcondition (Failure)
+1. Transaksi gagal diproses.
+2. Sistem menampilkan pesan kesalahan.
+Main Flow
+1. Pengguna mengakses menu keuangan.
+2. Sistem menampilkan daftar transaksi pembayaran.
+3. Pengguna memilih transaksi yang akan diverifikasi.
+4. Sistem menampilkan detail pembayaran (peserta, kelas, jumlah, metode).
+5. Pengguna melakukan verifikasi pembayaran.
+6. Pengguna memperbarui status transaksi (menunggu, berhasil, gagal).
+7. Sistem menyimpan perubahan status.
+8. Sistem menampilkan notifikasi berhasil.
+Alternative Flow
+A1: Pembayaran Belum Diterima- Status tetap “pending”.
+A2: Bukti Pembayaran Tidak Valid- Sistem menolak verifikasi.- Status tetap atau menjadi “ditolak”.
+A3: Gagal Menyimpan Data- Sistem menampilkan notifikasi gagal.
+A4: Refund / Pembatalan- Pengguna memproses pengembalian dana.- Sistem memperbarui status menjadi “refund”.
+Business Rules
+1. Setiap transaksi harus memiliki ID unik.
+2. Status pembayaran: pending, verified, failed, refunded.
+3. Pembayaran hanya dapat diverifikasi oleh pihak berwenang.
+4. Nilai pembayaran harus sesuai dengan harga training.
+5. Transaksi harus tercatat untuk keperluan audit.
+Special Requirements
+1. Sistem harus mencatat seluruh aktivitas keuangan (audit trail).
+2. Data transaksi harus aman dan terenkripsi.
+3. Sistem harus mampu menangani transaksi secara real-time.
+4. Integrasi dengan metode pembayaran (transfer bank, e-wallet, dll) dimungkinkan.
+Relasi Use Case
+Include: UC-01 Autentikasi Pengguna, Validasi PembayaranExtend: Refund Transaksi
+Generate Laporan
+Elemen
+Deskripsi
+Use Case ID
+UC-06
+Use Case Name
+Generate Laporan
+Klasifikasi
+Internal Use Case
+Aktor Utama
+Admin, Staff Operasional, Manajer
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Precondition
+1. Pengguna telah login (UC-01).
+2. Data operasional dan/atau keuangan tersedia (UC-02, UC-05).
+3. Pengguna memiliki hak akses untuk generate laporan.
+Postcondition (Success)
+1. Laporan berhasil dihasilkan sesuai parameter yang dipilih.
+2. Laporan dapat ditampilkan atau diunduh oleh pengguna.
+Postcondition (Failure)
+1. Laporan gagal dihasilkan.
+2. Sistem menampilkan pesan kesalahan.
+Main Flow
+1. Pengguna mengakses menu laporan.
+2. Sistem menampilkan pilihan jenis laporan.
+3. Pengguna memilih jenis laporan (operasional, keuangan, peserta, dll).
+4. Pengguna menentukan parameter (periode waktu, kelas, kategori, dll).
+5. Pengguna menekan tombol generate laporan.
+6. Sistem mengambil dan memproses data.
+7. Sistem menampilkan hasil laporan.
+8. Pengguna dapat mengunduh laporan (PDF/Excel).
+Alternative Flow
+A1: Data Tidak Tersedia- Sistem tidak menemukan data sesuai parameter.- Sistem menampilkan notifikasi.
+A2: Gagal Generate Laporan- Terjadi kesalahan sistem.- Sistem menampilkan error.
+A3: Parameter Tidak Valid- Input filter tidak sesuai.- Sistem meminta perbaikan.
+Business Rules
+1. Laporan harus berdasarkan data yang valid dan terbaru.
+2. Hak akses menentukan jenis laporan yang dapat diakses.
+3. Format laporan harus standar dan konsisten.
+4. Data dalam laporan tidak dapat diubah langsung.
+Special Requirements
+1. Sistem harus mampu menghasilkan laporan dalam waktu cepat.2. Mendukung format output (PDF, Excel).3. Laporan harus mudah dibaca dan terstruktur.4. Sistem mendukung filter parameter yang fleksibel.
+Relasi Use Case
+Include: UC-01 Autentikasi Pengguna, UC-02 Kelola Data Operasional, UC-05 Kelola KeuanganExtend: Export Laporan
+Manajemen Pengguna
+Elemen
+Deskripsi
+Use Case ID
+UC-07
+Use Case Name
+Manajemen Pengguna
+Klasifikasi
+Internal Use Case
+Aktor Utama
+Admin
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Precondition
+1. Admin telah login (UC-01).2. Admin memiliki hak akses untuk mengelola pengguna.
+Postcondition (Success)
+1. Data pengguna berhasil ditambahkan/diperbarui/dinonaktifkan/dihapus.
+2. Sistem menyimpan perubahan data pengguna.
+Postcondition (Failure)
+1. Perubahan data tidak tersimpan.2. Sistem menampilkan pesan kesalahan.
+Main Flow
+1. Admin mengakses menu manajemen pengguna.
+2. Sistem menampilkan daftar pengguna.
+3. Admin memilih aksi (tambah, ubah, nonaktifkan, hapus).
+4. Admin menginput atau memperbarui data pengguna (nama, email, role, dll).
+5. Admin menyimpan data.
+6. Sistem memvalidasi data pengguna.
+7. Sistem menyimpan perubahan.
+8. Sistem menampilkan notifikasi berhasil.
+Alternative Flow
+A1: Data Tidak Valid- Sistem mendeteksi input tidak valid.- Sistem menampilkan pesan error.
+A2: Data Duplikat- Email/username sudah digunakan.- Sistem menolak penyimpanan.
+A3: Gagal Menyimpan Data- Sistem menampilkan notifikasi gagal.
+A4: Pengguna Tidak Dapat Dihapus- Pengguna memiliki relasi data (transaksi/log).- Sistem menyarankan penonaktifan.
+A5: Penonaktifan Pengguna- Admin menonaktifkan akun pengguna.- Pengguna tidak dapat mengakses sistem.
+Business Rules
+1. Setiap pengguna harus memiliki identitas unik (email/username).
+2. Pengguna harus memiliki role yang valid.
+3. Pengguna yang memiliki relasi data tidak dapat dihapus.
+4. Status pengguna terdiri dari aktif dan nonaktif.
+Special Requirements
+1. Sistem harus mencatat aktivitas pengguna (audit trail).
+2. Data pengguna harus aman dan terenkripsi.
+3. Sistem harus mendukung manajemen user dalam jumlah besar.
+4. Validasi dilakukan di sisi client dan server.
+Relasi Use Case
+Include: UC-01 Autentikasi Pengguna, Validasi Data PenggunaExtend: Penonaktifan Pengguna
+Manajemen Role
+Elemen
+Deskripsi
+Use Case ID
+UC-08
+Use Case Name
+Manajemen Role
+Klasifikasi
+Internal Use Case
+Aktor Utama
+Admin
+Stakeholder
+Perusahaan PTS
+Deskripsi
+Precondition
+1. Admin telah login (UC-01).
+2. Admin memiliki hak akses untuk mengelola role.
+Postcondition (Success)
+1. Role dan hak akses berhasil ditambahkan/diperbarui/dihapus.
+2. Sistem menyimpan konfigurasi role.
+Postcondition (Failure)
+1. Perubahan role tidak tersimpan.
+2. Sistem menampilkan pesan kesalahan.
+Main Flow
+1. Admin mengakses menu manajemen role.
+2. Sistem menampilkan daftar role.
+3. Admin memilih aksi (tambah, ubah, hapus).
+4. Admin menginput nama role.
+5. Admin menentukan hak akses (permission) untuk role tersebut.
+6. Admin menyimpan konfigurasi role.
+7. Sistem memvalidasi data role.
+8. Sistem menyimpan perubahan.
+9. Sistem menampilkan notifikasi berhasil.
+Alternative Flow
+A1: Data Tidak Valid- Sistem mendeteksi input tidak valid.- Sistem menampilkan pesan error.
+A2: Role Duplikat- Nama role sudah digunakan.- Sistem menolak penyimpanan.
+A3: Role Tidak Dapat Dihapus- Role masih digunakan oleh pengguna.- Sistem menolak penghapusan.
+A4: Gagal Menyimpan Data- Sistem menampilkan notifikasi gagal.
+Business Rules
+1. Setiap role harus memiliki nama unik.
+2. Role harus memiliki minimal satu permission.
+3. Role yang digunakan oleh pengguna tidak dapat dihapus.
+4. Hak akses ditentukan berdasarkan permission yang dimiliki role.
+Special Requirements
+1. Sistem harus mendukung pengelolaan permission secara fleksibel.
+2. Sistem mencatat perubahan role (audit trail).
+3. Perubahan role harus langsung berdampak pada akses pengguna.
+4. Sistem harus aman dari manipulasi hak akses.
+Relasi Use Case
+Include: UC-01 Autentikasi Pengguna, Validasi Data RoleExtend: Pengaturan Permission
+TOGAF with ArchiMate Artefact
+KEBUTUHAN SPESIFIK
+Kebutuhan Funsional
+ID
+Kebutuhan
+FR-01
+Sistem harus menyediakan fitur login bagi pengguna
+FR-02
+Sistem harus mendukung autentikasi berbasis peran
+FR-03
+Sistem harus menampilkan dashboard sesuai dengan peran pengguna
+FR-04
+Administrator dapat mengelola data pengguna
+FR-05
+Mahasiswa dapat melihat informasi akademik
+FR-06
+Sistem harus menyimpan dan mengelola data pada basis data
+Kebutuhan Non Fungsional
+ID
+Kebutuhan
+NFR-01
+Waktu respon sistem maksimal 10 detik
+NFR-02
+Sistem memiliki ketersediaan minimal 99% uptime
+NFR-03
+Sistem harus menjamin keamanan data melalui mekanisme enkripsi
+NFR-04
+Sistem harus memiliki tingkat kemudahan penggunaan yang baik (usability)
+Kebutuhan Antarmuka Eksternal
+Antarmuka Pengguna (User Interface)
+Tampilan dashboard berbasis peran
+Navigasi sistem yang sederhana dan mudah digunakan
+Antarmuka Perangkat Lunak (Software Interface)
+Integrasi dengan basis data
+Integrasi dengan layanan API backend
+Antarmuka Komunikasi
+Menggunakan protokol HTTP/HTTPS
+Contoh User Interface
+Sales & Retail
+https://dribbble.com/shots/12372186-Max-Tools-Equipment-Parts-Sports-eCommerce-Responsive-Th
+E-Procurement
+https://dribbble.com/shots/24938814-E-Procurement-Preparation-of-basic-design-ROW-plan
+GRATEC Learning Management
+https://dribbble.com/shots/12326779-Dashboard-Learning-Management-System
+FITUR SISTEM
+Sistem Login
+Aktor: Semua pengguna
+Deskripsi: Sistem menyediakan mekanisme autentikasi untuk mengakses sistem
+Manajemen Pengguna
+Aktor: Administrator, PTS
+Deskripsi: Sistem memungkinkan pengelolaan data pengguna
+Informasi Akademik
+Aktor: Siswa Sertifkasi, Client
+Deskripsi: Sistem menampilkan informasi akademik kepada mahasiswa
+Manajemen Proyek – E-Procurement
+Aktor: Administrator, Client
+Deskripsi: Sistem menampilkan informasi Manajemen Proyek untuk Tracking proyek yang sedang berjalan dalam kebutuhan bisnis antara korporat dengan klien perusahaan dalam skala tender/penawaran dalam proyek terntentu.
+KEBUTUHAN LAIN
+Sales & Retail
+Requeset for QUOTA,
+E-Catalog,
+E-Procurement
+Layanan Tracking Proyek,
+Online Register or List Proyek,
+GRATEC Official Training Service
+E-Certificate,
+Online Register for Student with accurieq for client specialist,
+SURAT PERNYATAAN KERJASAMA
+Kami Yang Bertanda Tangan Di Bawah Ini:
+Atiq (pihak1)
+Gagang (Pihak 2)
+Sepakat untuk berkerjasama menjalankan tugas proyek tugas akhir SKRIPSI berupa aplikasi “Portal PT. PTS”, dengan ketentuan yang disepakati bersama sebagai berikut:
+Tugas Disepakati
+Jangka Waktu
+Komunikasi dan Layanan Bantuan
+Demikian Kesepakatan dibuat atas dasar saling percaya dan semangat menyelesakan tugas
+Surabaya, 2026
+(Atiq)(Gagang)
