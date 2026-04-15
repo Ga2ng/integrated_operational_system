@@ -11,47 +11,48 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-900 min-h-screen flex flex-col">
-    <header class="bg-[#0d7f7a] text-white shadow">
+    <header class="fixed top-0 left-0 right-0 z-[100] border-b border-white/10 bg-[#0d7f7a] text-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="{{ route('home') }}" class="flex items-center gap-2 font-semibold text-lg">
-                    <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+            <div class="flex justify-between items-center h-[84px]">
+                <a href="{{ route('home') }}" class="flex items-center gap-2 font-semibold text-[17px] tracking-wide">
                     <span>{{ config('app.name') }}</span>
                 </a>
                 <nav class="flex items-center gap-4 text-sm font-medium">
-                    <a href="{{ route('home') }}" class="hover:underline flex items-center gap-1 @if(request()->routeIs('home')) underline @endif">
-                        <i class="fa-solid fa-house"></i> Beranda
+                    <a href="{{ route('home') }}" class="hover:underline @if(request()->routeIs('home')) underline @endif">
+                        Beranda
                     </a>
-                    <a href="{{ route('catalog') }}" class="hover:underline flex items-center gap-1 @if(request()->routeIs('catalog')) underline @endif">
-                        <i class="fa-solid fa-store"></i> Katalog
+                    <a href="{{ route('catalog') }}" class="hover:underline @if(request()->routeIs('catalog')) underline @endif">
+                        Katalog
                     </a>
                     @auth
-                        <a href="{{ route('dashboard') }}" class="hover:underline flex items-center gap-1">
-                            <i class="fa-solid fa-gauge"></i> Dashboard
+                        <a href="{{ route('dashboard') }}" class="hover:underline">
+                            Dashboard
                         </a>
                         @can('permission', 'dashboard.view')
-                            <a href="{{ route('admin.dashboard') }}" class="hover:underline flex items-center gap-1">
-                                <i class="fa-solid fa-user-shield"></i> Admin
+                            <a href="{{ route('admin.dashboard') }}" class="hover:underline">
+                                Admin
                             </a>
                         @endcan
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
-                            <button type="submit" class="hover:underline flex items-center gap-1">
-                                <i class="fa-solid fa-right-from-bracket"></i> Keluar
+                            <button type="submit" class="hover:underline">
+                                Keluar
                             </button>
                         </form>
                     @else
-                        <a href="{{ route('login') }}" class="hover:underline flex items-center gap-1">
-                            <i class="fa-solid fa-right-to-bracket"></i> Masuk
+                        <a href="{{ route('login') }}" class="hover:underline">
+                            Masuk
                         </a>
-                        <a href="{{ route('register') }}" class="rounded-md bg-white/15 px-3 py-1.5 hover:bg-white/25 flex items-center gap-1">
-                            <i class="fa-solid fa-user-plus"></i> Daftar
+                        <a href="{{ route('register') }}" class="rounded-full border border-white/85 bg-transparent px-4 py-2 hover:bg-white/10">
+                            Daftar
                         </a>
                     @endauth
                 </nav>
             </div>
         </div>
     </header>
+
+    <div class="h-[84px]"></div>
 
     <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {{ $slot }}

@@ -199,16 +199,16 @@
             </aside>
 
             <div class="admin-main flex min-h-screen min-w-0 flex-1 flex-col lg:h-screen lg:overflow-hidden">
-                <header class="admin-topbar shadow-sm">
+                <header class="admin-topbar border-b border-white/10 bg-[#0d7f7a] text-white shadow-sm min-h-[84px]">
                     <button
                         type="button"
-                        class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                        class="inline-flex items-center justify-center rounded-lg border border-white/80 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
                         @click="sidebarOpen = true"
                         aria-label="Buka menu"
                     >
-                        <i class="fas fa-bars"></i>
+                        Menu
                     </button>
-                    <span class="truncate text-sm font-semibold text-slate-800">{{ $title ?? 'Panel admin' }}</span>
+                    <span class="truncate text-sm font-semibold text-white">{{ $title ?? 'Panel admin' }}</span>
                 </header>
 
                 <div class="admin-content flex-1 lg:overflow-y-auto">
