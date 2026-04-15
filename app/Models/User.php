@@ -61,6 +61,11 @@ class User extends Authenticatable
         return $this->hasMany(Project::class, 'manager_user_id');
     }
 
+    public function activityLogs(): HasMany
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
+
     public function isSuperAdmin(): bool
     {
         return $this->role?->code === 'super_admin';

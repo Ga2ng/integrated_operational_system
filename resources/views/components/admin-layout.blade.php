@@ -5,6 +5,7 @@
     $showSalesInventory = $u && ($u->hasPermission('rfq.view') || $u->hasPermission('inventory.view'));
     $showMasterData = $u && $u->hasPermission('client.view');
     $showTraining = $u && $u->hasPermission('certificate.view');
+    $showLogs = $u && $u->hasPermission('logs.view');
     $projectManagementOpen = request()->routeIs('admin.projects.*');
     $salesInventoryOpen = request()->routeIs('admin.rfqs.*', 'admin.inventory-materials.*');
     $masterDataOpen = request()->routeIs('admin.clients.*');
@@ -168,6 +169,20 @@
                             </div>
                         </details>
                     @endcan
+
+                    @if ($showLogs)
+                        <a
+                            href="{{ route('admin.logs.index') }}"
+                            @click="sidebarOpen = false"
+                            class="admin-nav-link mt-3 {{ request()->routeIs('admin.logs.*') ? 'is-active' : '' }}"
+                        >
+                            <i class="fas fa-clock-rotate-left w-4 text-center text-xs opacity-95"></i>
+                            <span>Logs</span>
+                            @if (request()->routeIs('admin.logs.*'))
+                                <span class="admin-nav-dot"></span>
+                            @endif
+                        </a>
+                    @endif
 
                     <a
                         href="{{ route('profile.edit') }}"

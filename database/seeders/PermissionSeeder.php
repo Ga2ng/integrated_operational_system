@@ -35,6 +35,7 @@ class PermissionSeeder extends Seeder
             ['module' => 'settings', 'name' => 'Buat peran', 'code' => 'role.create', 'sort_order' => 101],
             ['module' => 'settings', 'name' => 'Ubah peran & izin', 'code' => 'role.update', 'sort_order' => 102],
             ['module' => 'settings', 'name' => 'Hapus peran', 'code' => 'role.delete', 'sort_order' => 103],
+            ['module' => 'audit', 'name' => 'Lihat activity logs', 'code' => 'logs.view', 'sort_order' => 110],
         ];
 
         foreach ($rows as $row) {

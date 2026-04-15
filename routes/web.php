@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\CertificateController as AdminCertificateController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\InventoryMaterialController;
@@ -35,6 +36,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('rfqs', AdminRfqController::class)->except(['show']);
     Route::resource('clients', ClientController::class)->only(['index', 'edit', 'update']);
     Route::resource('certificates', AdminCertificateController::class)->except(['show', 'destroy']);
+    Route::get('logs', [ActivityLogController::class, 'index'])->name('logs.index');
 
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::resource('roles', RoleController::class)->except(['show']);
