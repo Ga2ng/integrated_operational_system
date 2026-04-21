@@ -49,4 +49,43 @@
         </table>
     </div>
     <div class="admin-pagination">{{ $rfqs->links() }}</div>
+
+    <div class="admin-card mt-4">
+        <div class="admin-card-header flex items-center gap-2">
+            <i class="fas fa-right-from-bracket" style="color: var(--admin-primary);"></i>
+            Log item keluar dari RFQ
+        </div>
+        <div class="overflow-x-auto">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Waktu</th>
+                        <th>RFQ</th>
+                        <th>Material</th>
+                        <th>Qty keluar</th>
+                        <th>Stok sebelum</th>
+                        <th>Stok sesudah</th>
+                        <th>Oleh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($stockOutLogs as $log)
+                        <tr>
+                            <td>{{ $log->created_at->format('d M Y H:i') }}</td>
+                            <td>#{{ $log->rfq_id }} - {{ $log->rfq?->request_title ?? '-' }}</td>
+                            <td>{{ $log->material?->name ?? '-' }}</td>
+                            <td>{{ number_format($log->qty, 2) }}</td>
+                            <td>{{ number_format($log->stock_before, 2) }}</td>
+                            <td>{{ number_format($log->stock_after, 2) }}</td>
+                            <td>{{ $log->creator?->name ?? '-' }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="py-8 text-center text-slate-500">Belum ada log item keluar dari RFQ.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 </x-admin-layout>

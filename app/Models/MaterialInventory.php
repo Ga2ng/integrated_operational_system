@@ -36,6 +36,11 @@ class MaterialInventory extends Model
         return $this->hasMany(RfqMaterialItem::class);
     }
 
+    public function stockLogs(): HasMany
+    {
+        return $this->hasMany(MaterialStockLog::class, 'material_inventory_id');
+    }
+
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');

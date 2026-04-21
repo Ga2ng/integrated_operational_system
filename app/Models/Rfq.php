@@ -46,4 +46,9 @@ class Rfq extends Model
     {
         return $this->hasMany(RfqMaterialItem::class);
     }
+
+    public function stockLogs(): HasMany
+    {
+        return $this->hasMany(MaterialStockLog::class);
+    }
 }

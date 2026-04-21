@@ -208,6 +208,11 @@ Detail mapping `sync` di `RoleSeeder` mengikuti pola template (`Permission::wher
 - Seeder permission/role disesuaikan agar mapping tidak lagi membutuhkan permission produk.
 - Penyesuaian sidebar lanjutan: menu `Digital Portal` dihapus, akun guest dipindah ke grup `Master Data`.
 - Standarisasi layout form admin: semua card form diubah menjadi `w-full` (tanpa `max-w-*`).
+- Prinsip inventory pada RFQ diterapkan: saat RFQ create/update, stok `material_inventories.current_stock` otomatis berkurang sesuai `qty_needed`.
+- Ditambahkan audit log pergerakan stok (`material_stock_logs`) untuk mencatat item keluar (OUT) dari RFQ beserta stok sebelum/sesudah.
+- Pada saat RFQ diupdate, sistem melakukan rollback stok item lama (IN), lalu menerapkan item terbaru (OUT) agar stok tidak dobel berkurang.
+- Layout customer/non-admin disamakan dengan tema admin: menggunakan shell sidebar yang konsisten (warna, icon, topbar, spacing) untuk user baru daftar dan user tanpa role admin.
+- Layout lama Breeze navbar (`layouts/navigation.blade.php`) dihapus karena tidak dipakai lagi setelah migrasi ke sidebar customer.
 
 ## 9. Risiko / batasan skripsi
 
