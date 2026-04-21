@@ -10,11 +10,14 @@ return new class extends Migration
     {
         Schema::create('rfq_material_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('rfq_id')->constrained('rfqs')->cascadeOnDelete();
+            // RFQ table created in later migration; FK added later.
+            $table->unsignedBigInteger('rfq_id');
             $table->foreignId('material_inventory_id')->constrained('material_inventories')->restrictOnDelete();
             $table->decimal('qty_needed', 14, 2)->default(0);
             $table->decimal('estimated_cost', 14, 2)->default(0);
             $table->timestamps();
+
+            $table->index('rfq_id');
         });
     }
 
