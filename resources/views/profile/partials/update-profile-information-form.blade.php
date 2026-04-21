@@ -1,11 +1,12 @@
 <section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
+        <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+            <i class="fa-solid fa-user text-[#0d7f7a] text-sm"></i>
+            {{ __('Informasi Profil') }}
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
+        <p class="mt-1 text-sm text-gray-500">
+            {{ __("Perbarui nama dan alamat email akun Anda.") }}
         </p>
     </header>
 
@@ -13,12 +14,12 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-5">
         @csrf
         @method('patch')
 
         <div>
-            <x-input-label for="name" :value="__('Name')" />
+            <x-input-label for="name" :value="__('Nama')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
@@ -30,17 +31,17 @@
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>
-                    <p class="text-sm mt-2 text-gray-800">
-                        {{ __('Your email address is unverified.') }}
-
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            {{ __('Click here to re-send the verification email.') }}
+                    <p class="text-sm mt-2 text-gray-700">
+                        {{ __('Email Anda belum terverifikasi.') }}
+                        <button form="send-verification" class="text-sm text-[#0d7f7a] hover:text-[#0a5f5b] font-medium underline transition-colors">
+                            {{ __('Klik di sini untuk mengirim ulang email verifikasi.') }}
                         </button>
                     </p>
 
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
+                        <p class="mt-2 font-medium text-sm text-green-600 flex items-center gap-1">
+                            <i class="fa-solid fa-circle-check text-xs"></i>
+                            {{ __('Link verifikasi baru telah dikirim ke email Anda.') }}
                         </p>
                     @endif
                 </div>
@@ -48,7 +49,9 @@
         </div>
 
         <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+            <x-primary-button>
+                <i class="fa-solid fa-check mr-1"></i> {{ __('Simpan') }}
+            </x-primary-button>
 
             @if (session('status') === 'profile-updated')
                 <p
@@ -56,8 +59,8 @@
                     x-show="show"
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+                    class="text-sm text-green-600 flex items-center gap-1"
+                ><i class="fa-solid fa-circle-check text-xs"></i> {{ __('Tersimpan.') }}</p>
             @endif
         </div>
     </form>

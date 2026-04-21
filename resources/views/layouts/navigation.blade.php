@@ -1,83 +1,125 @@
 @php
     $links = [
-        ['label' => __('Beranda'), 'href' => route('home'), 'active' => request()->routeIs('home')],
-        ['label' => __('Katalog'), 'href' => route('catalog'), 'active' => request()->routeIs('catalog')],
-        ['label' => __('Dashboard'), 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
-        ['label' => __('RFQ saya'), 'href' => route('dashboard.rfqs.index'), 'active' => request()->routeIs('dashboard.rfqs.*')],
+        ['label' => __('Beranda'), 'href' => route('home'), 'active' => request()->routeIs('home'), 'icon' => 'fa-home'],
+        ['label' => __('Katalog'), 'href' => route('catalog'), 'active' => request()->routeIs('catalog'), 'icon' => 'fa-store'],
+        ['label' => __('Dashboard'), 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard'), 'icon' => 'fa-gauge'],
+        ['label' => __('RFQ saya'), 'href' => route('dashboard.rfqs.index'), 'active' => request()->routeIs('dashboard.rfqs.*'), 'icon' => 'fa-file-invoice-dollar'],
     ];
 
     if (auth()->user()?->can('permission', 'dashboard.view')) {
-        $links[] = ['label' => __('Admin'), 'href' => route('admin.dashboard'), 'active' => request()->routeIs('admin.*')];
+        $links[] = ['label' => __('Admin'), 'href' => route('admin.dashboard'), 'active' => request()->routeIs('admin.*'), 'icon' => 'fa-shield-halved'];
     }
 @endphp
 
-<header id="ios-navbar" class="fixed top-0 left-0 right-0 z-[100] border-b border-white/10 bg-[#0d7f7a] text-white transition-transform duration-700 ease-[cubic-bezier(0.33,1,0.68,1)]">
+<header
+    id="ios-navbar"
+    class="fixed top-0 left-0 right-0 z-[100] transition-all duration-300"
+    style="background: rgba(10, 95, 91, 0.85); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid rgba(255,255,255,0.08);"
+    x-data="{ scrolled: false, mobileOpen: false }"
+    x-init="window.addEventListener('scroll', () => scrolled = window.scrollY > 20)"
+    :style="scrolled ? 'background: rgba(10, 95, 91, 0.96); box-shadow: 0 4px 30px rgba(0,0,0,0.15);' : ''"
+    @keydown.escape.window="mobileOpen = false"
+>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between gap-3 py-5">
-            <a href="{{ route('home') }}" class="flex flex-shrink-0 items-center gap-2">
-                <span class="font-semibold tracking-wide text-[17px]">{{ config('app.name') }}</span>
+        <div class="flex items-center justify-between h-[72px]">
+            {{-- Brand --}}
+            <a href="{{ route('home') }}" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shadow-lg shadow-black/10 group-hover:bg-white/25 transition-all">
+                    <i class="fa-solid fa-layer-group text-white text-lg"></i>
+                </div>
+                <div class="hidden sm:block">
+                    <span class="text-white font-bold text-[15px] tracking-tight block leading-tight">{{ config('app.name') }}</span>
+                    <span class="text-[10px] text-teal-200/60 font-medium uppercase tracking-[0.15em]">Operational Platform</span>
+                </div>
             </a>
 
-            <nav class="hidden md:flex items-center gap-8">
+            {{-- Desktop Nav --}}
+            <nav class="hidden md:flex items-center gap-7">
                 @foreach ($links as $link)
                     <a href="{{ $link['href'] }}"
-                        class="font-sans text-sm font-medium transition-colors {{ $link['active'] ? 'border-b-2 border-[#5eead4] pb-0.5 text-white' : 'text-white/80 hover:text-white' }}">
+                        class="relative text-sm font-medium transition-colors py-1 {{ $link['active'] ? 'text-white' : 'text-white/75 hover:text-white' }}"
+                        style="{{ $link['active'] ? 'border-bottom: 2px solid #5eead4;' : '' }}"
+                    >
                         {{ $link['label'] }}
                     </a>
                 @endforeach
             </nav>
 
-            <div class="flex items-center gap-2 flex-shrink-0">
+            {{-- Desktop user --}}
+            <div class="hidden md:flex items-center gap-3">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="hidden md:inline-flex items-center gap-1.5 rounded-full border border-white/85 bg-transparent px-5 py-2.5 font-sans text-sm font-semibold text-white transition-all hover:bg-white/10">
+                        <button class="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-sm font-medium text-white hover:bg-white/15 transition-all">
+                            <div class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
+                                <i class="fa-solid fa-user text-[10px]"></i>
+                            </div>
                             <span class="max-w-36 truncate">{{ Auth::user()->name }}</span>
-                            <span class="text-[10px] opacity-90">v</span>
+                            <i class="fa-solid fa-chevron-down text-[8px] text-white/60"></i>
                         </button>
                     </x-slot>
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            <i class="fa-solid fa-user-edit mr-2 text-gray-400 text-xs"></i> {{ __('Edit Profil') }}
                         </x-dropdown-link>
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <x-dropdown-link :href="route('logout')"
                                 onclick="event.preventDefault(); this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                <i class="fa-solid fa-right-from-bracket mr-2 text-gray-400 text-xs"></i> {{ __('Keluar') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
                 </x-dropdown>
-
-                <button id="ios-hamburger" type="button" class="rounded-lg p-2 text-white transition-colors hover:bg-white/10 md:hidden" aria-label="Menu">
-                    <span id="ios-hamburger-icon" class="text-sm font-semibold tracking-wide">Menu</span>
-                </button>
             </div>
+
+            {{-- Mobile hamburger --}}
+            <button
+                @click="mobileOpen = !mobileOpen"
+                class="md:hidden w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                aria-label="Menu"
+            >
+                <i class="fa-solid" :class="mobileOpen ? 'fa-xmark text-lg' : 'fa-bars'"></i>
+            </button>
         </div>
     </div>
 
-    <div id="ios-mobile-menu" class="hidden border-t border-white/15 bg-[#0b6b67] md:hidden">
-        <div class="flex flex-col gap-3 px-4 py-4">
+    {{-- Mobile menu --}}
+    <div
+        x-show="mobileOpen"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 -translate-y-2"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-2"
+        class="md:hidden border-t border-white/10 bg-[#0a5854]"
+        x-cloak
+    >
+        <div class="px-4 py-4 space-y-1">
             @foreach ($links as $link)
                 <a href="{{ $link['href'] }}"
-                    class="border-b border-white/10 py-2 font-sans text-sm font-medium {{ $link['active'] ? 'font-semibold text-[#5eead4]' : 'text-white/85' }}">
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all {{ $link['active'] ? 'bg-white/15 text-white' : 'text-white/75 hover:text-white hover:bg-white/10' }}">
+                    <i class="fa-solid {{ $link['icon'] }} w-5 text-center text-xs"></i>
                     {{ $link['label'] }}
                 </a>
             @endforeach
 
-            <div class="mt-2 grid grid-cols-2 gap-2">
-                <a href="{{ route('profile.edit') }}"
-                    class="inline-flex items-center justify-center gap-1.5 rounded-full border-2 border-white/90 px-4 py-3 font-sans text-sm font-semibold text-white">
-                    {{ __('Profile') }}
+            <div class="border-t border-white/10 pt-3 mt-2 space-y-1">
+                <div class="flex items-center gap-3 px-4 py-2">
+                    <div class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center">
+                        <i class="fa-solid fa-user text-white text-xs"></i>
+                    </div>
+                    <span class="text-white text-sm font-medium truncate">{{ Auth::user()->name }}</span>
+                </div>
+                <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-white/75 hover:text-white hover:bg-white/10 transition-all">
+                    <i class="fa-solid fa-user-edit w-5 text-center text-xs"></i> Edit Profil
                 </a>
-
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit"
-                        class="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[#0f766e] px-4 py-3 font-sans text-sm font-semibold text-white">
-                        {{ __('Log Out') }}
+                    <button type="submit" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-red-300 hover:text-white hover:bg-red-500/20 transition-all w-full">
+                        <i class="fa-solid fa-right-from-bracket w-5 text-center text-xs"></i> Keluar
                     </button>
                 </form>
             </div>
@@ -85,65 +127,4 @@
     </div>
 </header>
 
-<div class="h-[84px] md:h-[92px]"></div>
-
-<script>
-    (function() {
-        const navbar = document.getElementById('ios-navbar');
-        if (!navbar) return;
-
-        let lastScrollY = window.scrollY;
-        let ticking = false;
-        const scrollThreshold = 80;
-        const scrollDelta = 15;
-
-        function applyScroll() {
-            const scrollY = window.scrollY;
-
-            if (scrollY > 40) {
-                navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.08)';
-            } else {
-                navbar.style.boxShadow = 'none';
-            }
-
-            const delta = scrollY - lastScrollY;
-            if (scrollY <= 10) {
-                navbar.classList.remove('-translate-y-full');
-            } else if (delta > scrollDelta && scrollY > scrollThreshold) {
-                navbar.classList.add('-translate-y-full');
-            } else if (delta < -scrollDelta) {
-                navbar.classList.remove('-translate-y-full');
-            }
-
-            lastScrollY = scrollY;
-            ticking = false;
-        }
-
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(applyScroll);
-                ticking = true;
-            }
-        }, { passive: true });
-        applyScroll();
-
-        const hamburger = document.getElementById('ios-hamburger');
-        const icon = document.getElementById('ios-hamburger-icon');
-        const mobileMenu = document.getElementById('ios-mobile-menu');
-
-        if (hamburger && icon && mobileMenu) {
-            hamburger.addEventListener('click', () => {
-                const isOpen = !mobileMenu.classList.contains('hidden');
-                mobileMenu.classList.toggle('hidden');
-                icon.textContent = isOpen ? 'Menu' : 'Tutup';
-            });
-
-            mobileMenu.querySelectorAll('a').forEach((link) => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
-                    icon.textContent = 'Menu';
-                });
-            });
-        }
-    })();
-</script>
+<div class="h-[72px]"></div>

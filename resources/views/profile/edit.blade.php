@@ -1,29 +1,22 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+<x-admin-layout>
+    <x-slot name="title">Edit Profil</x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
+    <h1 class="admin-page-title">
+        <i class="fas fa-user-edit text-[#0d7f7a]"></i> Edit Profil
+    </h1>
+    <p class="admin-page-desc">Kelola informasi akun, password, dan pengaturan lainnya.</p>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
+    <div class="space-y-6 max-w-2xl">
+        <div class="admin-card admin-card--padded">
+            @include('profile.partials.update-profile-information-form')
+        </div>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
-            </div>
+        <div class="admin-card admin-card--padded">
+            @include('profile.partials.update-password-form')
+        </div>
+
+        <div class="admin-card admin-card--padded">
+            @include('profile.partials.delete-user-form')
         </div>
     </div>
-</x-app-layout>
+</x-admin-layout>

@@ -20,11 +20,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@isset($title){{ $title }} — @endisset{{ config('app.name') }}</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700,800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased text-gray-900">
+<body class="font-sans antialiased text-gray-900" style="font-family: 'Inter', sans-serif;">
     <div
         class="min-h-screen lg:h-screen lg:overflow-hidden"
         x-data="{ sidebarOpen: false }"
@@ -35,21 +35,23 @@
             x-show="sidebarOpen"
             x-transition.opacity
             x-cloak
-            class="fixed inset-0 z-40 bg-slate-900/50 lg:hidden"
+            class="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm lg:hidden"
             @click="sidebarOpen = false"
         ></div>
 
         <div class="flex min-h-screen lg:h-screen">
+            {{-- ═══════════════════ SIDEBAR ═══════════════════ --}}
             <aside
                 id="admin-sidebar"
                 data-admin-sidebar
                 class="admin-sidebar fixed inset-y-0 left-0 z-50 flex h-screen w-64 max-w-[min(16rem,calc(100vw-2.5rem))] -translate-x-full transform flex-col overflow-hidden transition-transform duration-200 ease-out lg:static lg:z-auto lg:max-w-none lg:shrink-0 lg:translate-x-0"
                 :class="{ 'translate-x-0': sidebarOpen }"
             >
+                {{-- Brand --}}
                 <a
                     href="{{ route('admin.dashboard') }}"
                     @click="sidebarOpen = false"
-                    class="admin-sidebar-brand shrink-0 flex items-center px-4 py-3 transition-opacity hover:opacity-90"
+                    class="admin-sidebar-brand shrink-0 flex items-center px-5 py-4 transition-opacity hover:opacity-90"
                 >
                     @if ($hasLogo)
                         <img
@@ -59,15 +61,19 @@
                         >
                     @else
                         <span class="flex w-full items-center gap-3">
-                            <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/20 shadow-sm">
+                            <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15 shadow-lg shadow-black/10 backdrop-blur-sm border border-white/10">
                                 <i class="fas fa-layer-group text-white"></i>
                             </span>
-                            <span class="text-left text-sm font-bold leading-tight text-white">{{ config('app.name') }}</span>
+                            <span class="text-left">
+                                <span class="block text-sm font-bold leading-tight text-white">{{ config('app.name') }}</span>
+                                <span class="block text-[9px] text-teal-200/50 uppercase tracking-[0.12em] font-medium">Admin Panel</span>
+                            </span>
                         </span>
                     @endif
                 </a>
 
-                <nav class="admin-sidebar-nav flex-1 min-h-0 overflow-y-auto px-3 py-3 space-y-0.5">
+                {{-- Nav --}}
+                <nav class="admin-sidebar-nav flex-1 min-h-0 overflow-y-auto px-3 py-4 space-y-1">
                     @can('permission', 'dashboard.view')
                         <a
                             href="{{ route('admin.dashboard') }}"
@@ -82,11 +88,18 @@
                         </a>
                     @endcan
 
+                    {{-- Section label --}}
+                    @if ($showProjectManagement || $showSalesInventory || $showMasterData || $showTraining)
+                        <div class="px-3 pt-5 pb-1">
+                            <span class="text-[9px] font-bold text-white/30 uppercase tracking-[0.15em]">Modul Operasional</span>
+                        </div>
+                    @endif
+
                     @if ($showProjectManagement)
-                        <details class="admin-nav-group mt-3" {{ $projectManagementOpen ? 'open' : '' }}>
+                        <details class="admin-nav-group" {{ $projectManagementOpen ? 'open' : '' }}>
                             <summary class="admin-nav-summary">
                                 <i class="fas fa-briefcase w-4 text-center text-xs"></i>
-                                <span>Project Management System</span>
+                                <span>Project Management</span>
                                 <i class="fas fa-chevron-down admin-nav-chevron"></i>
                             </summary>
                             <div class="admin-nav-subwrap space-y-0.5">
@@ -100,10 +113,10 @@
                     @endif
 
                     @if ($showSalesInventory)
-                        <details class="admin-nav-group mt-3" {{ $salesInventoryOpen ? 'open' : '' }}>
+                        <details class="admin-nav-group" {{ $salesInventoryOpen ? 'open' : '' }}>
                             <summary class="admin-nav-summary">
                                 <i class="fas fa-warehouse w-4 text-center text-xs"></i>
-                                <span>Sales and Inventory System</span>
+                                <span>Sales & Inventory</span>
                                 <i class="fas fa-chevron-down admin-nav-chevron"></i>
                             </summary>
                             <div class="admin-nav-subwrap space-y-0.5">
@@ -122,7 +135,7 @@
                     @endif
 
                     @if ($showMasterData)
-                        <details class="admin-nav-group mt-3" {{ $masterDataOpen ? 'open' : '' }}>
+                        <details class="admin-nav-group" {{ $masterDataOpen ? 'open' : '' }}>
                             <summary class="admin-nav-summary">
                                 <i class="fas fa-database w-4 text-center text-xs"></i>
                                 <span>Master Data</span>
@@ -139,10 +152,10 @@
                     @endif
 
                     @if ($showTraining)
-                        <details class="admin-nav-group mt-3" {{ $trainingOpen ? 'open' : '' }}>
+                        <details class="admin-nav-group" {{ $trainingOpen ? 'open' : '' }}>
                             <summary class="admin-nav-summary">
                                 <i class="fas fa-graduation-cap w-4 text-center text-xs"></i>
-                                <span>Training Management System</span>
+                                <span>Training Management</span>
                                 <i class="fas fa-chevron-down admin-nav-chevron"></i>
                             </summary>
                             <div class="admin-nav-subwrap space-y-0.5">
@@ -156,7 +169,10 @@
                     @endif
 
                     @can('permission', 'role.view')
-                        <details class="admin-nav-group mt-3" {{ $pengaturanOpen ? 'open' : '' }}>
+                        <div class="px-3 pt-5 pb-1">
+                            <span class="text-[9px] font-bold text-white/30 uppercase tracking-[0.15em]">Konfigurasi</span>
+                        </div>
+                        <details class="admin-nav-group" {{ $pengaturanOpen ? 'open' : '' }}>
                             <summary class="admin-nav-summary">
                                 <i class="fas fa-cog w-4 text-center text-xs"></i>
                                 <span>Pengaturan</span>
@@ -174,7 +190,7 @@
                         <a
                             href="{{ route('admin.logs.index') }}"
                             @click="sidebarOpen = false"
-                            class="admin-nav-link mt-3 {{ request()->routeIs('admin.logs.*') ? 'is-active' : '' }}"
+                            class="admin-nav-link mt-1 {{ request()->routeIs('admin.logs.*') ? 'is-active' : '' }}"
                         >
                             <i class="fas fa-clock-rotate-left w-4 text-center text-xs opacity-95"></i>
                             <span>Logs</span>
@@ -187,14 +203,26 @@
                     <a
                         href="{{ route('profile.edit') }}"
                         @click="sidebarOpen = false"
-                        class="admin-nav-link mt-3 {{ request()->routeIs('profile.edit') ? 'is-active' : '' }}"
+                        class="admin-nav-link mt-1 {{ request()->routeIs('profile.edit') ? 'is-active' : '' }}"
                     >
                         <i class="fas fa-user-edit w-4 text-center text-xs opacity-95"></i>
                         <span>Edit profil</span>
                     </a>
                 </nav>
 
+                {{-- Sidebar footer --}}
                 <div class="admin-sidebar-footer shrink-0 px-3 py-3 space-y-0.5">
+                    {{-- User info --}}
+                    <div class="flex items-center gap-3 px-3 py-2.5 mb-2">
+                        <div class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center shrink-0 border border-white/10">
+                            <i class="fas fa-user text-white text-xs"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-white text-xs font-semibold truncate">{{ $u?->name ?? 'User' }}</div>
+                            <div class="text-white/40 text-[10px] truncate">{{ $u?->email ?? '' }}</div>
+                        </div>
+                    </div>
+
                     <a href="{{ route('home') }}" @click="sidebarOpen = false" class="admin-sidebar-footer-link">
                         <i class="fas fa-external-link-alt w-4 text-center text-xs"></i>
                         <span>Lihat situs</span>
@@ -213,25 +241,33 @@
                 </div>
             </aside>
 
+            {{-- ═══════════════════ MAIN ═══════════════════ --}}
             <div class="admin-main flex min-h-screen min-w-0 flex-1 flex-col lg:h-screen lg:overflow-hidden">
-                <header class="admin-topbar border-b border-white/10 bg-[#0d7f7a] text-white shadow-sm min-h-[84px]">
+                {{-- Topbar (mobile) --}}
+                <header class="admin-topbar">
                     <button
                         type="button"
-                        class="inline-flex items-center justify-center rounded-lg border border-white/80 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
+                        class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 transition-colors"
                         @click="sidebarOpen = true"
                         aria-label="Buka menu"
                     >
+                        <i class="fas fa-bars text-xs"></i>
                         Menu
                     </button>
-                    <span class="truncate text-sm font-semibold text-white">{{ $title ?? 'Panel admin' }}</span>
+                    <span class="truncate text-sm font-semibold text-gray-800">{{ $title ?? 'Panel Admin' }}</span>
                 </header>
 
+                {{-- Content --}}
                 <div class="admin-content flex-1 lg:overflow-y-auto">
                     @if (session('status'))
-                        <div class="admin-alert admin-alert--success">{{ session('status') }}</div>
+                        <div class="admin-alert admin-alert--success">
+                            <i class="fa-solid fa-circle-check mr-1.5"></i>{{ session('status') }}
+                        </div>
                     @endif
                     @if (session('error'))
-                        <div class="admin-alert admin-alert--error">{{ session('error') }}</div>
+                        <div class="admin-alert admin-alert--error">
+                            <i class="fa-solid fa-circle-xmark mr-1.5"></i>{{ session('error') }}
+                        </div>
                     @endif
                     {{ $slot }}
                 </div>
