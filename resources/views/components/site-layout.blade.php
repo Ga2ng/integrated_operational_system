@@ -161,15 +161,13 @@
                     <a href="{{ route('catalog') }}" class="nav-link-site @if(request()->routeIs('catalog')) is-active @endif">
                         Katalog
                     </a>
+                    <a href="{{ route('certificates.search') }}" class="nav-link-site @if(request()->routeIs('certificates.search*')) is-active @endif">
+                        Cek Sertifikat
+                    </a>
                     @auth
                         <a href="{{ route('dashboard') }}" class="nav-link-site">
                             Dashboard
                         </a>
-                        @can('permission', 'dashboard.view')
-                            <a href="{{ route('admin.dashboard') }}" class="nav-link-site">
-                                Admin
-                            </a>
-                        @endcan
                     @endauth
                 </nav>
 
@@ -242,15 +240,13 @@
                 <a href="{{ route('catalog') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all text-sm font-medium @if(request()->routeIs('catalog')) bg-white/15 text-white @endif">
                     <i class="fa-solid fa-store w-5 text-center"></i> Katalog
                 </a>
+                <a href="{{ route('certificates.search') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all text-sm font-medium @if(request()->routeIs('certificates.search*')) bg-white/15 text-white @endif">
+                    <i class="fa-solid fa-certificate w-5 text-center"></i> Cek Sertifikat
+                </a>
                 @auth
                     <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all text-sm font-medium">
                         <i class="fa-solid fa-gauge w-5 text-center"></i> Dashboard
                     </a>
-                    @can('permission', 'dashboard.view')
-                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all text-sm font-medium">
-                            <i class="fa-solid fa-shield-halved w-5 text-center"></i> Admin
-                        </a>
-                    @endcan
                 @endauth
             </nav>
             <div class="border-t border-white/10 pt-4 space-y-2">

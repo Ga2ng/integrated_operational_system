@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700,800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased text-gray-900" style="font-family: 'Inter', sans-serif;">
@@ -51,6 +52,13 @@
                         <i class="fas fa-file-invoice-dollar w-4 text-center text-xs opacity-95"></i>
                         <span>RFQ Saya</span>
                         @if (request()->routeIs('dashboard.rfqs.*'))
+                            <span class="admin-nav-dot"></span>
+                        @endif
+                    </a>
+                    <a href="{{ route('dashboard.my-certifications.index') }}" @click="sidebarOpen = false" class="admin-nav-link {{ request()->routeIs('dashboard.my-certifications.*') ? 'is-active' : '' }}">
+                        <i class="fas fa-file-signature w-4 text-center text-xs opacity-95"></i>
+                        <span>Sertifikasi Saya</span>
+                        @if (request()->routeIs('dashboard.my-certifications.*'))
                             <span class="admin-nav-dot"></span>
                         @endif
                     </a>

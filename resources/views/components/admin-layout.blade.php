@@ -3,14 +3,12 @@
     $hasLogo = file_exists(public_path('images/logo.png'));
     $showProjectManagement = $u && $u->hasPermission('project.view');
     $showSalesInventory = $u && ($u->hasPermission('rfq.view') || $u->hasPermission('inventory.view'));
-    $showMasterData = $u && $u->hasPermission('client.view');
     $showTraining = $u && $u->hasPermission('certificate.view');
     $showLogs = $u && $u->hasPermission('logs.view');
     $projectManagementOpen = request()->routeIs('admin.projects.*');
     $salesInventoryOpen = request()->routeIs('admin.rfqs.*', 'admin.inventory-materials.*');
-    $masterDataOpen = request()->routeIs('admin.clients.*');
     $trainingOpen = request()->routeIs('admin.certificates.*');
-    $pengaturanOpen = request()->routeIs('admin.settings.roles.*');
+    $pengaturanOpen = request()->routeIs('admin.settings.roles.*', 'admin.settings.users.*');
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="admin-app">
@@ -22,6 +20,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700,800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased text-gray-900" style="font-family: 'Inter', sans-serif;">
@@ -89,7 +88,7 @@
                     @endcan
 
                     {{-- Section label --}}
-                    @if ($showProjectManagement || $showSalesInventory || $showMasterData || $showTraining)
+                    @if ($showProjectManagement || $showSalesInventory || $showTraining)
                         <div class="px-3 pt-5 pb-1">
                             <span class="text-[9px] font-bold text-white/30 uppercase tracking-[0.15em]">Modul Operasional</span>
                         </div>
@@ -134,23 +133,6 @@
                         </details>
                     @endif
 
-                    @if ($showMasterData)
-                        <details class="admin-nav-group" {{ $masterDataOpen ? 'open' : '' }}>
-                            <summary class="admin-nav-summary">
-                                <i class="fas fa-database w-4 text-center text-xs"></i>
-                                <span>Master Data</span>
-                                <i class="fas fa-chevron-down admin-nav-chevron"></i>
-                            </summary>
-                            <div class="admin-nav-subwrap space-y-0.5">
-                                @can('permission', 'client.view')
-                                    <a href="{{ route('admin.clients.index') }}" @click="sidebarOpen = false" class="admin-nav-sublink {{ request()->routeIs('admin.clients.*') ? 'is-active' : '' }}">
-                                        <i class="fas fa-users w-3 text-center"></i> Akun Guest / Klien
-                                    </a>
-                                @endcan
-                            </div>
-                        </details>
-                    @endif
-
                     @if ($showTraining)
                         <details class="admin-nav-group" {{ $trainingOpen ? 'open' : '' }}>
                             <summary class="admin-nav-summary">
@@ -160,8 +142,11 @@
                             </summary>
                             <div class="admin-nav-subwrap space-y-0.5">
                                 @can('permission', 'certificate.view')
+                                    <a href="{{ route('admin.certification-programs.index') }}" @click="sidebarOpen = false" class="admin-nav-sublink {{ request()->routeIs('admin.certification-programs.*') ? 'is-active' : '' }}">
+                                        <i class="fas fa-list-check w-3 text-center"></i> Program Sertifikasi
+                                    </a>
                                     <a href="{{ route('admin.certificates.index') }}" @click="sidebarOpen = false" class="admin-nav-sublink {{ request()->routeIs('admin.certificates.*') ? 'is-active' : '' }}">
-                                        <i class="fas fa-award w-3 text-center"></i> Sertifikasi
+                                        <i class="fas fa-award w-3 text-center"></i> Data Sertifikat (Final)
                                     </a>
                                 @endcan
                             </div>
@@ -182,6 +167,11 @@
                                 <a href="{{ route('admin.settings.roles.index') }}" @click="sidebarOpen = false" class="admin-nav-sublink {{ request()->routeIs('admin.settings.roles.*') ? 'is-active' : '' }}">
                                     <i class="fas fa-user-shield w-3 text-center"></i> Peran &amp; izin
                                 </a>
+                                @if ($u?->isSuperAdmin())
+                                    <a href="{{ route('admin.settings.users.index') }}" @click="sidebarOpen = false" class="admin-nav-sublink {{ request()->routeIs('admin.settings.users.*') ? 'is-active' : '' }}">
+                                        <i class="fas fa-users-cog w-3 text-center"></i> Kelola pengguna
+                                    </a>
+                                @endif
                             </div>
                         </details>
                     @endcan
@@ -201,9 +191,9 @@
                     @endif
 
                     <a
-                        href="{{ route('profile.edit') }}"
+                        href="{{ route('admin.profile.edit') }}"
                         @click="sidebarOpen = false"
-                        class="admin-nav-link mt-1 {{ request()->routeIs('profile.edit') ? 'is-active' : '' }}"
+                        class="admin-nav-link mt-1 {{ request()->routeIs('profile.edit', 'admin.profile.edit') ? 'is-active' : '' }}"
                     >
                         <i class="fas fa-user-edit w-4 text-center text-xs opacity-95"></i>
                         <span>Edit profil</span>
@@ -226,10 +216,6 @@
                     <a href="{{ route('home') }}" @click="sidebarOpen = false" class="admin-sidebar-footer-link">
                         <i class="fas fa-external-link-alt w-4 text-center text-xs"></i>
                         <span>Lihat situs</span>
-                    </a>
-                    <a href="{{ route('dashboard') }}" @click="sidebarOpen = false" class="admin-sidebar-footer-link">
-                        <i class="fas fa-user w-4 text-center text-xs"></i>
-                        <span>Akun klien</span>
                     </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

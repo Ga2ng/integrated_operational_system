@@ -38,6 +38,11 @@ class Project extends Model
         return $this->hasMany(Certificate::class);
     }
 
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(ProjectTask::class);
+    }
+
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -46,5 +51,10 @@ class Project extends Model
     public function updatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function isCompleted(): bool
+    {
+        return str($this->status)->lower()->value() === 'selesai';
     }
 }

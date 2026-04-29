@@ -18,9 +18,26 @@ class DashboardController extends Controller
             return redirect()->route('admin.dashboard');
         }
 
+        // 1. Chart Data: RFQ Status for User
+        $rfqStatus = \App\Models\Rfq::where('client_id', $user->id)
+            ->selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status')->toArray();
+
+        // Pending Certifications
+        $pendingCertifications = \App\Models\CertificationParticipant::with('program')
+            ->where('participant_user_id', $user->id)
+            ->whereIn('status', ['pending', 'rejected'])
+            ->latest()
+            ->get();
+
         return view('dashboard', [
-            'rfqs' => $user->rfqsAsClient()->latest()->limit(10)->get(),
-            'certificates' => $user->certificatesAsParticipant()->latest()->limit(10)->get(),
+            'rfqs' => $user->rfqsAsClient()->latest()->limit(5)->get(),
+            'certificates' => $user->certificatesAsParticipant()->latest()->limit(5)->get(),
+            'pendingCertifications' => $pendingCertifications,
+            'rfqStatusLabels' => array_keys($rfqStatus),
+            'rfqStatusData' => array_values($rfqStatus),
+            'totalRfqs' => array_sum($rfqStatus),
         ]);
     }
 }

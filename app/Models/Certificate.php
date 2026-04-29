@@ -10,6 +10,7 @@ class Certificate extends Model
     protected $fillable = [
         'participant_user_id',
         'project_id',
+        'certification_program_id',
         'issued_at',
         'valid_until',
         'document_path',
@@ -34,6 +35,11 @@ class Certificate extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function certificationProgram(): BelongsTo
+    {
+        return $this->belongsTo(CertificationProgram::class);
     }
 
     public function createdBy(): BelongsTo
