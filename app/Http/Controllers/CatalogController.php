@@ -2,19 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MaterialInventory;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CatalogController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $modules = [
-            ['name' => 'Project Management System', 'description' => 'Monitoring progres proyek, timeline, dan status pekerjaan.', 'icon' => 'fa-diagram-project'],
-            ['name' => 'Sales and Inventory System', 'description' => 'Pengelolaan RFQ dan inventory material sebagai dasar keputusan penawaran.', 'icon' => 'fa-warehouse'],
-            ['name' => 'PTS Digital Portal (Guest View)', 'description' => 'Portal publik untuk informasi layanan dan akses akun pengguna.', 'icon' => 'fa-globe'],
-            ['name' => 'Training Management System', 'description' => 'Pengelolaan sertifikasi dan histori pelatihan peserta.', 'icon' => 'fa-graduation-cap'],
-        ];
+        $query = MaterialInventory::where('is_active', true);
 
-        return view('site.catalog', compact('modules'));
+        if ($search = $request->get('q')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%")
+                  ->orWhere('specification', 'like', "%{$search}%");
+            });
+        }
+
+        $materials = $query->orderBy('name')->paginate(12)->withQueryString();
+
+        return view('site.catalog', compact('materials', 'search'));
+    }
+
+    public function show(MaterialInventory $materialInventory): View
+    {
+        abort_unless($materialInventory->is_active, 404);
+
+        return view('site.catalog-detail', ['material' => $materialInventory]);
     }
 }

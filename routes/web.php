@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/katalog', [CatalogController::class, 'index'])->name('catalog');
+Route::get('/katalog/{materialInventory}', [CatalogController::class, 'show'])->name('catalog.show');
 Route::get('/sertifikat/cek/{code}', [CertificateVerifyController::class, 'show'])->name('certificates.verify');
 
 Route::get('/dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');

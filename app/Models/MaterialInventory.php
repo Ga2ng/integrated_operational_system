@@ -12,6 +12,7 @@ class MaterialInventory extends Model
         'code',
         'name',
         'specification',
+        'image',
         'uom',
         'current_stock',
         'minimum_stock',
