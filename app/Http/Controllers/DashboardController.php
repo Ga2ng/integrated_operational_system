@@ -19,7 +19,7 @@ class DashboardController extends Controller
         }
 
         // 1. Chart Data: RFQ Status for User
-        $rfqStatus = \App\Models\Rfq::where('client_id', $user->id)
+        $rfqStatus = $user->rfqsAsClient()
             ->selectRaw('status, COUNT(*) as count')
             ->groupBy('status')
             ->pluck('count', 'status')->toArray();
